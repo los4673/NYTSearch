@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import DeleteBtn from "../../components/DeleteBtn";
 import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
 import { Link } from "react-router-dom";
@@ -17,17 +16,20 @@ class Home extends Component {
     endYear: 2017
   };
 
+  // Load data if components mounts to DOM
   componentDidMount() {
     this.loadArticles();
     this.loadSearch();
   }
 
+  // Load saved articles from mongoDB
   loadArticles = () => {
     API.getArticles()
       .then(res => this.setState({ savedArticles: res.data }))
       .catch(err => console.log(err));
   };
 
+  //For testing purposes but will be replaced with data from axois 
   loadSearch = () => {
     this.setState({
       searchResults: [
@@ -53,10 +55,6 @@ class Home extends Component {
       "date": date,
       "url": url
     }
-    console.log("Save Article button clicked and function called");
-    console.log("Saved Article title" + title);
-    console.log("Saved Article date" + date);
-    console.log("Saved Article url" + url);
     if(title) {
       API.saveArticle(article)
       .then(res => this.loadArticles())
@@ -73,6 +71,7 @@ class Home extends Component {
     });
   };
 
+  // Use axios to return search results from nyt api
   handleFormSubmit = event => {
     event.preventDefault();
     const searchTerm = this.state.searchTerm;
@@ -81,11 +80,6 @@ class Home extends Component {
     const query = {
       q: searchTerm
     };
-    console.log("Submit Button Clicked");
-    console.log("Search Term " + this.state.searchTerm);
-    console.log("Number of Records" + this.state.numRecords);
-    console.log("Start Year " + this.state.startYear);
-    console.log("End Year " + this.state.endYear);
     API.search(query)
       .then(res => this.setState({ searchResults: res.data }))
       .catch(err => console.log(err));
